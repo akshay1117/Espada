@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5f5fb" />
+  <title>Orbit — Your AI career mentor</title>
+  <style>
+    :root {
+      --ink: #191a2e;
+      --muted: #77788c;
+      --line: #e9e8f1;
+      --paper: #ffffff;
+      --canvas: #f6f6fb;
+      --purple: #7356e8;
+      --purple-deep: #5c40cb;
+      --purple-soft: #f1edff;
+      --mint: #dff8ee;
+      --mint-ink: #28765d;
+      --amber: #fff2d8;
+      --shadow: 0 18px 55px rgba(40, 34, 91, .075);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 77% 9%, rgba(204, 193, 255, .26), transparent 31rem),
+        radial-gradient(ellipse at 7% 39%, rgba(214, 250, 235, .34), transparent 28rem),
+        var(--canvas);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    .topbar {
+      height: 76px;
+      border-bottom: 1px solid rgba(229, 228, 239, .8);
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(14px);
+    }
+    .nav-inner, .page { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
+    .nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+    .brand-mark {
+      width: 39px; height: 39px; display: grid; place-items: center; border-radius: 13px;
+      color: white; background: linear-gradient(145deg, #937aff, #6445d9);
+      box-shadow: 0 7px 18px rgba(105, 76, 213, .25);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand-word { font-weight: 760; letter-spacing: -.055em; font-size: 19px; line-height: 1; }
+    .brand-caption { margin-top: 4px; font-size: 8px; letter-spacing: .17em; color: #88889a; font-weight: 800; }
+    .nav-right { display: flex; align-items: center; gap: 21px; }
+    .mode-pill { display: inline-flex; gap: 8px; align-items: center; padding: 8px 11px; border: 1px solid #e9e4ff; border-radius: 30px; color: #6c59bd; background: #faf9ff; font-size: 10px; font-weight: 800; letter-spacing: .07em; }
+    .mode-pill .dot { width: 7px; height: 7px; background: #36b58a; border-radius: 50%; box-shadow: 0 0 0 3px #e2f8f0; }
+    .nav-link { display: flex; align-items: center; gap: 7px; text-decoration: none; color: #525269; font-size: 12px; font-weight: 700; }
+    .nav-link svg { width: 15px; height: 15px; color: var(--purple); }
+    .page { padding-top: 54px; padding-bottom: 40px; }
+    .hero { display: grid; grid-template-columns: 1fr 332px; align-items: center; gap: 44px; margin-bottom: 33px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: #7359d1; font-size: 10px; letter-spacing: .16em; font-weight: 850; }
+    .eyebrow-line { width: 21px; height: 2px; background: #8a73e8; border-radius: 9px; }
+    h1 { margin: 14px 0 10px; font-size: clamp(39px, 5vw, 57px); line-height: 1.04; letter-spacing: -.065em; font-weight: 770; }
+    h1 span { color: var(--purple); }
+    .hero-copy { max-width: 590px; margin: 0; color: #696a7d; font-size: 15px; line-height: 1.7; }
+    .hero-proof { display: flex; align-items: center; flex-wrap: wrap; gap: 17px; margin-top: 19px; color: #5c5d70; font-size: 11px; font-weight: 650; }
+    .hero-proof span { display: inline-flex; align-items: center; gap: 6px; }
+    .hero-proof svg { width: 14px; height: 14px; color: #7c61e6; }
+    .hero-art {
+      min-height: 174px; position: relative; overflow: hidden; border: 1px solid rgba(220,215,248,.86);
+      border-radius: 20px; padding: 23px 23px 20px; background: linear-gradient(135deg, #f0edff 0%, #faf9ff 59%, #e9f8f3 130%);
+    }
+    .hero-art:before, .hero-art:after { content: ""; position: absolute; border: 1px solid rgba(137, 115, 218, .16); border-radius: 50%; }
+    .hero-art:before { width: 160px; height: 160px; right: -22px; top: 46px; }
+    .hero-art:after { width: 220px; height: 220px; right: -52px; top: 17px; }
+    .orbit-stamp { position: absolute; right: 42px; top: 57px; width: 61px; height: 61px; z-index: 1; display: grid; place-items: center; border-radius: 50%; background: white; box-shadow: 0 8px 23px rgba(82, 62, 155, .13); color: #7356e8; }
+    .orbit-stamp svg { width: 28px; height: 28px; }
+    .hero-art-label { color: #8272c8; font-size: 9px; font-weight: 850; letter-spacing: .14em; }
+    .hero-art-title { position: relative; z-index: 2; max-width: 184px; margin-top: 15px; font-size: 20px; line-height: 1.23; font-weight: 730; letter-spacing: -.045em; }
+    .hero-art-note { position: relative; z-index: 2; max-width: 185px; margin-top: 8px; color: #77768b; font-size: 10px; line-height: 1.55; }
+    .workspace { display: grid; grid-template-columns: minmax(315px, 370px) minmax(0, 1fr); align-items: start; gap: 21px; }
+    .panel { background: var(--paper); border: 1px solid rgba(229,228,238,.9); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .profile-panel { padding: 25px 23px 19px; }
+    .panel-heading { display: flex; justify-content: space-between; align-items: flex-start; }
+    .mini-label { color: #88889a; font-size: 9px; font-weight: 850; letter-spacing: .14em; }
+    .panel-heading h2 { margin: 6px 0 0; font-size: 21px; letter-spacing: -.045em; }
+    .step-count { padding-top: 4px; color: #a1a0b0; font-size: 10px; font-weight: 750; letter-spacing: .06em; }
+    .step-count strong { color: var(--purple); }
+    .step-line { display: flex; gap: 5px; margin: 18px 0 21px; }
+    .step-line span { height: 3px; flex: 1; background: #edecf3; border-radius: 10px; }
+    .step-line span:first-child, .step-line span:nth-child(2) { background: #b5a5f6; }
+    .field-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: #46465c; font-size: 10px; font-weight: 850; letter-spacing: .09em; }
+    .field-label .field-index { color: #aaa8b9; font-size: 9px; }
+    .select-wrap { position: relative; }
+    .select-wrap:after { content: ""; position: absolute; right: 14px; top: 50%; width: 7px; height: 7px; border-right: 1.7px solid #737388; border-bottom: 1.7px solid #737388; transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+    .goal-select { width: 100%; appearance: none; height: 45px; border: 1px solid #e7e6ef; border-radius: 11px; padding: 0 39px 0 13px; color: #29293d; background: #fff; font-weight: 650; font-size: 12px; outline: none; transition: .18s ease; }
+    .goal-select:focus, .skill-level:focus { border-color: #aa97f3; box-shadow: 0 0 0 3px rgba(115,86,232,.1); }
+    .quick-start { margin-top: 16px; }
+    .quick-label { color: #9a99a8; font-size: 9px; font-weight: 800; letter-spacing: .11em; }
+    .demo-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+    .demo-chip { cursor: pointer; border: 1px solid #e9e7f0; border-radius: 8px; padding: 7px 9px; background: #fff; color: #656579; font-size: 10px; font-weight: 650; transition: .16s ease; }
+    .demo-chip:hover { border-color: #c8bcfa; color: #5f45ca; background: #faf9ff; }
+    .divider { height: 1px; margin: 19px 0; background: #efedf4; }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .section-head h3 { margin: 0; font-size: 13px; letter-spacing: -.025em; }
+    .count-label { color: #89889b; font-size: 9px; font-weight: 700; white-space: nowrap; }
+    .field-hint { margin: 5px 0 10px; color: #8a899b; font-size: 10px; line-height: 1.5; }
+    .skills-list { display: grid; gap: 6px; }
+    .skill-row { min-height: 38px; display: grid; grid-template-columns: minmax(0,1fr) 112px; align-items: center; gap: 7px; padding: 4px 6px 4px 9px; border: 1px solid #eeedf3; border-radius: 9px; transition: .15s ease; }
+    .skill-row:has(.skill-check:checked) { border-color: #d7cff9; background: #fcfbff; }
+    .skill-select { min-width: 0; display: flex; align-items: center; gap: 9px; cursor: pointer; }
+    .skill-check { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .checkmark { width: 15px; height: 15px; display: grid; place-items: center; flex: 0 0 15px; border: 1.4px solid #d6d5e0; border-radius: 5px; color: transparent; background: #fff; transition: .15s ease; }
+    .checkmark svg { width: 10px; height: 10px; }
+    .skill-check:checked + .checkmark { color: white; border-color: var(--purple); background: var(--purple); }
+    .skill-check:focus-visible + .checkmark { outline: 3px solid rgba(115,86,232,.22); }
+    .skill-name { overflow: hidden; color: #58586b; font-size: 10px; font-weight: 670; text-overflow: ellipsis; white-space: nowrap; }
+    .skill-row:has(.skill-check:checked) .skill-name { color: #35334c; }
+    .skill-level { width: 100%; height: 28px; padding: 0 7px; border: 1px solid transparent; border-radius: 7px; color: #706f82; background: transparent; font-size: 9px; outline: none; cursor: pointer; }
+    .skill-row:has(.skill-check:checked) .skill-level { color: #6b54c3; background: #f4f1ff; }
+    .skill-level:disabled { opacity: .42; cursor: not-allowed; }
+    .time-section { margin-top: 19px; }
+    .hours-output { color: #7156d9; font-size: 10px; font-weight: 800; }
+    .range-wrap { margin-top: 10px; }
+    .hours-range { width: 100%; height: 4px; margin: 0; appearance: none; border-radius: 10px; background: linear-gradient(90deg, #785ce5 0%, #c9bdf8 22%, #eae8f1 22%, #eae8f1 100%); cursor: pointer; }
+    .hours-range::-webkit-slider-thumb { width: 16px; height: 16px; appearance: none; border: 3px solid white; border-radius: 50%; background: #7557e4; box-shadow: 0 1px 6px rgba(75,55,154,.35); }
+    .hours-range::-moz-range-thumb { width: 12px; height: 12px; border: 3px solid white; border-radius: 50%; background: #7557e4; box-shadow: 0 1px 6px rgba(75,55,154,.35); }
+    .range-labels { display: flex; justify-content: space-between; margin-top: 7px; color: #a09faf; font-size: 9px; }
+    .pace-hint { min-height: 15px; margin: 7px 0 0; color: #8b899d; font-size: 9px; }
+    .primary-btn { width: 100%; min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 11px; margin-top: 16px; border: 0; border-radius: 11px; color: white; background: linear-gradient(105deg, #7356e8, #6044d3); font-size: 12px; font-weight: 750; cursor: pointer; box-shadow: 0 8px 18px rgba(102,75,208,.2); transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease; }
+    .primary-btn:hover { transform: translateY(-1px); box-shadow: 0 11px 22px rgba(102,75,208,.27); }
+    .primary-btn:disabled { opacity: .78; cursor: wait; transform: none; }
+    .primary-btn svg { width: 16px; height: 16px; }
+    .privacy-note { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 11px; color: #9b9aa9; font-size: 9px; }
+    .privacy-note svg { width: 12px; height: 12px; }
+    .results { min-width: 0; }
+    .results-shell { padding: 25px 25px 21px; }
+    .result-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .result-eyebrow { display: flex; align-items: center; gap: 7px; color: #7559db; font-size: 9px; font-weight: 850; letter-spacing: .13em; }
+    .result-eyebrow svg { width: 14px; height: 14px; }
+    .result-heading h2 { margin: 8px 0 5px; font-size: clamp(22px, 2.5vw, 29px); line-height: 1.17; letter-spacing: -.052em; }
+    .result-sub { margin: 0; color: #88879a; font-size: 11px; line-height: 1.55; }
+    .action-buttons { display: flex; flex: 0 0 auto; gap: 7px; padding-top: 2px; }
+    .icon-action { display: inline-flex; align-items: center; gap: 6px; padding: 8px 9px; border: 1px solid #eae8f1; border-radius: 9px; color: #6d6b80; background: white; font-size: 9px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+    .icon-action:hover { border-color: #d2c9f6; color: #6248c8; background: #fbfaff; }
+    .icon-action svg { width: 13px; height: 13px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; margin-top: 20px; }
+    .metric { min-height: 72px; display: flex; align-items: center; gap: 11px; padding: 12px 13px; border: 1px solid #edecf3; border-radius: 12px; background: #fff; }
+    .metric-icon { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 34px; border-radius: 10px; color: #7356e8; background: #f2efff; }
+    .metric:nth-child(2) .metric-icon { color: #2c9875; background: #e8f8f1; }
+    .metric:nth-child(3) .metric-icon { color: #d18739; background: #fff5e5; }
+    .metric-icon svg { width: 17px; height: 17px; }
+    .metric-value { color: #28283d; font-size: 16px; font-weight: 780; letter-spacing: -.04em; line-height: 1.1; }
+    .metric-label { margin-top: 4px; color: #9291a2; font-size: 9px; font-weight: 600; }
+    .insight-card { display: flex; align-items: flex-start; gap: 11px; margin-top: 12px; padding: 13px 14px; border: 1px solid #e7e1ff; border-radius: 12px; background: linear-gradient(105deg, #f8f6ff, #fbfaff 68%, #f3fbf7); }
+    .insight-icon { width: 27px; height: 27px; display: grid; place-items: center; flex: 0 0 27px; border-radius: 8px; color: #fff; background: linear-gradient(145deg, #9883f3, #7254df); }
+    .insight-icon svg { width: 15px; height: 15px; }
+    .insight-title { display: flex; align-items: center; gap: 8px; color: #7a68bf; font-size: 8px; font-weight: 850; letter-spacing: .11em; }
+    .explain-badge { padding: 3px 6px; border-radius: 20px; color: #8e7ad7; background: #efebff; font-size: 7px; letter-spacing: .04em; }
+    .insight-text { margin: 5px 0 0; color: #626176; font-size: 10px; line-height: 1.55; }
+    .agent-panel { margin-top: 10px; padding: 11px 13px 9px; border: 1px solid #e8e7ef; border-radius: 12px; background: linear-gradient(110deg, #fff, #fcfbff); }
+    .agent-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid #f0eff4; }
+    .agent-head-left { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .agent-icon { width: 25px; height: 25px; display: grid; place-items: center; flex: 0 0 25px; border-radius: 8px; color: #6c50d7; background: #f1edff; }
+    .agent-icon svg { width: 14px; height: 14px; }
+    .agent-kicker { color: #55546b; font-size: 8px; font-weight: 850; letter-spacing: .12em; }
+    .agent-run-status { margin-top: 3px; overflow: hidden; color: #9291a1; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+    .agent-mode-tag { flex: 0 0 auto; padding: 4px 7px; border: 1px solid #e5e1f8; border-radius: 20px; color: #735bc6; background: #f8f6ff; font-size: 7px; font-weight: 850; letter-spacing: .07em; }
+    .agent-trace { display: grid; gap: 1px; padding-top: 5px; }
+    .agent-call { display: grid; grid-template-columns: 17px minmax(132px, 190px) minmax(0,1fr); align-items: center; gap: 7px; min-height: 22px; }
+    .agent-call-check { width: 14px; height: 14px; display: grid; place-items: center; border-radius: 50%; color: #318566; background: #e7f7ef; font-size: 9px; font-weight: 900; }
+    .agent-call-name { overflow: hidden; color: #6d648c; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 8px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .agent-call-result { overflow: hidden; color: #9392a2; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+    .roadmap-card { margin-top: 14px; padding: 19px 19px 9px; border: 1px solid #ecebf2; border-radius: 15px; background: #fff; }
+    .roadmap-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0eff4; }
+    .roadmap-head h3 { margin: 0; font-size: 15px; letter-spacing: -.035em; }
+    .roadmap-head p { margin: 5px 0 0; color: #9695a5; font-size: 9px; }
+    .progress-box { min-width: 104px; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; color: #9090a0; font-size: 9px; }
+    .progress-label strong { color: #6250b9; font-size: 10px; }
+    .progress-track { overflow: hidden; height: 5px; border-radius: 10px; background: #efedf5; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7053df, #a494f4); transition: width .3s ease; }
+    .timeline { position: relative; padding: 5px 0 0; }
+    .timeline:before { content: ""; position: absolute; top: 26px; bottom: 23px; left: 13px; width: 1px; background: #e8e5f2; }
+    .path-step { position: relative; display: grid; grid-template-columns: 27px minmax(0, 1fr) auto; gap: 10px; padding: 12px 0; }
+    .step-marker { z-index: 1; width: 27px; height: 27px; display: grid; place-items: center; border: 1px solid #e5e2ef; border-radius: 50%; color: #827f97; background: #fff; font-size: 9px; font-weight: 800; }
+    .path-step.is-done .step-marker { color: white; border-color: #49a987; background: #49a987; }
+    .path-step.is-done .step-marker svg { width: 13px; height: 13px; }
+    .step-main { min-width: 0; padding-top: 1px; }
+    .step-topline { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .step-name { color: #333348; font-size: 11px; font-weight: 760; letter-spacing: -.012em; }
+    .step-tag { padding: 3px 6px; border-radius: 5px; color: #8069d1; background: #f4f1ff; font-size: 7px; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+    .step-tag.mastered { color: #348367; background: #e7f8f0; }
+    .step-tag.refresh { color: #a26b28; background: #fff4df; }
+    .step-tag.learn { color: #6373a2; background: #edf1fb; }
+    .step-description { margin: 5px 0 0; color: #888799; font-size: 9px; line-height: 1.55; }
+    .step-task { margin-top: 6px; color: #6c6b80; font-size: 9px; line-height: 1.5; }
+    .step-task strong { color: #545368; font-weight: 750; }
+    .step-resource { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: #7157d1; text-decoration: none; font-size: 8px; font-weight: 750; }
+    .step-resource:hover { text-decoration: underline; }
+    .step-resource svg { width: 10px; height: 10px; }
+    .step-meta { min-width: 52px; padding-top: 2px; text-align: right; }
+    .step-week { display: inline-block; padding: 5px 7px; border-radius: 6px; color: #706a8d; background: #f6f5fa; font-size: 7px; font-weight: 850; letter-spacing: .06em; white-space: nowrap; }
+    .step-hours { margin-top: 5px; color: #a1a0af; font-size: 8px; white-space: nowrap; }
+    .step-done-btn { width: 18px; height: 18px; display: inline-grid; place-items: center; margin-top: 7px; border: 1px solid #dedce8; border-radius: 6px; color: transparent; background: white; cursor: pointer; transition: .15s ease; }
+    .step-done-btn svg { width: 11px; height: 11px; }
+    .step-done-btn:hover { border-color: #9a85ed; }
+    .step-done-btn.checked { color: white; border-color: #50aa88; background: #50aa88; }
+    .step-done-btn:disabled { cursor: default; opacity: .8; }
+    .mentor-footer { display: flex; align-items: center; gap: 9px; margin-top: 13px; padding: 11px 13px; border-radius: 11px; color: #64786f; background: #f0f8f4; font-size: 9px; line-height: 1.45; }
+    .mentor-footer svg { width: 15px; height: 15px; flex: 0 0 15px; color: #56a88a; }
+    .footer { display: flex; justify-content: space-between; gap: 15px; margin-top: 27px; padding: 14px 2px 0; border-top: 1px solid rgba(225,224,235,.8); color: #9998a8; font-size: 9px; line-height: 1.5; }
+    .footer strong { color: #747387; font-weight: 750; }
+    .chat-launcher { position: fixed; z-index: 41; right: max(22px, calc((100vw - 1240px) / 2)); bottom: 22px; display: inline-flex; align-items: center; gap: 9px; min-height: 48px; padding: 0 17px 0 13px; border: 0; border-radius: 28px; color: #fff; background: linear-gradient(105deg, #785de9, #5e44ce); box-shadow: 0 11px 30px rgba(73, 54, 164, .3); font-size: 12px; font-weight: 760; cursor: pointer; transition: transform .16s ease, box-shadow .16s ease; }
+    .chat-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(73, 54, 164, .36); }
+    .chat-launcher-icon { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: #7056dc; background: #fff; }
+    .chat-launcher-icon svg { width: 15px; height: 15px; }
+    .chat-widget { position: fixed; z-index: 40; right: max(22px, calc((100vw - 1240px) / 2)); bottom: 82px; width: min(370px, calc(100vw - 32px)); height: min(555px, calc(100vh - 112px)); min-height: 410px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e8e5f1; border-radius: 18px; background: #fff; box-shadow: 0 24px 75px rgba(34, 28, 82, .23); animation: chat-in .18s ease-out; }
+    .chat-widget[hidden] { display: none; }
+    .chat-widget[hidden] { display: none; }
+    @keyframes chat-in { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .chat-header { display: flex; align-items: center; gap: 10px; padding: 14px 15px; color: white; background: linear-gradient(110deg, #282344, #40336f); }
+    .chat-avatar { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 34px; border: 1px solid rgba(255,255,255,.18); border-radius: 11px; color: white; background: rgba(255,255,255,.13); }
+    .chat-avatar svg { width: 19px; height: 19px; }
+    .chat-header-copy { min-width: 0; flex: 1; }
+    .chat-header-title { font-size: 13px; font-weight: 770; letter-spacing: -.02em; }
+    .chat-header-sub { margin-top: 3px; color: rgba(255,255,255,.67); font-size: 9px; }
+    .chat-live-pill { padding: 5px 7px; border: 1px solid rgba(255,255,255,.19); border-radius: 20px; color: #ded7ff; background: rgba(255,255,255,.08); font-size: 7px; font-weight: 850; letter-spacing: .06em; white-space: nowrap; }
+    .chat-live-pill.is-live { border-color: rgba(136,239,190,.35); color: #b8f4d8; background: rgba(49,150,103,.18); }
+    .chat-close { width: 27px; height: 27px; display: grid; place-items: center; border: 0; border-radius: 8px; color: rgba(255,255,255,.76); background: transparent; cursor: pointer; }
+    .chat-close:hover { color: #fff; background: rgba(255,255,255,.12); }
+    .chat-close svg { width: 15px; height: 15px; }
+    .chat-context { display: flex; align-items: center; gap: 7px; padding: 9px 14px; border-bottom: 1px solid #efedf5; color: #77758b; background: #fbfaff; font-size: 9px; }
+    .chat-context-dot { width: 6px; height: 6px; border-radius: 50%; background: #42b58d; box-shadow: 0 0 0 3px #e6f7f0; }
+    .chat-messages { display: flex; flex: 1; flex-direction: column; gap: 10px; overflow: auto; padding: 13px 13px 9px; background: #fff; scroll-behavior: smooth; }
+    .chat-row { display: flex; align-items: flex-end; gap: 6px; max-width: 93%; }
+    .chat-row.user { align-self: flex-end; justify-content: flex-end; }
+    .chat-row.assistant { align-self: flex-start; }
+    .chat-mini-avatar { width: 20px; height: 20px; display: grid; place-items: center; flex: 0 0 20px; border-radius: 7px; color: #7357dd; background: #f1edff; }
+    .chat-mini-avatar svg { width: 12px; height: 12px; }
+    .chat-bubble { padding: 9px 11px; border: 1px solid #eceaf2; border-radius: 13px 13px 13px 4px; color: #555468; background: #faf9fd; font-size: 10px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .chat-row.user .chat-bubble { border-color: #7358de; border-radius: 13px 13px 4px 13px; color: #fff; background: linear-gradient(120deg, #7b61e8, #674bda); }
+    .chat-link { display: inline-flex; align-items: center; gap: 5px; margin: 5px 0 0 26px; color: #7054d8; font-size: 9px; font-weight: 750; text-decoration: none; }
+    .chat-link:hover { text-decoration: underline; }
+    .chat-link svg { width: 11px; height: 11px; }
+    .chat-agent-tools { margin: 6px 0 0 3px; color: #8a7ac2; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 7px; line-height: 1.4; overflow-wrap: anywhere; }
+    .chat-typing { display: inline-flex; align-items: center; gap: 4px; padding: 10px 12px; border: 1px solid #eceaf2; border-radius: 13px 13px 13px 4px; background: #faf9fd; }
+    .chat-typing span { width: 5px; height: 5px; border-radius: 50%; background: #9d91d8; animation: type-dot .9s infinite ease-in-out; }
+    .chat-typing span:nth-child(2) { animation-delay: .12s; }
+    .chat-typing span:nth-child(3) { animation-delay: .24s; }
+    @keyframes type-dot { 0%,60%,100% { opacity: .35; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+    .chat-prompts { display: flex; flex-wrap: wrap; gap: 6px; padding: 5px 12px 9px; }
+    .chat-prompt { padding: 7px 9px; border: 1px solid #e6e2f4; border-radius: 20px; color: #6953c2; background: #fbfaff; font-size: 8px; font-weight: 690; cursor: pointer; transition: .15s ease; }
+    .chat-prompt:hover { border-color: #b9a9f2; background: #f5f1ff; }
+    .chat-input-area { padding: 9px 11px 8px; border-top: 1px solid #eeecf3; background: #fff; }
+    .chat-form { display: flex; align-items: flex-end; gap: 7px; padding: 6px 6px 6px 11px; border: 1px solid #e7e5ef; border-radius: 12px; background: #fff; transition: .15s ease; }
+    .chat-form:focus-within { border-color: #a999ec; box-shadow: 0 0 0 3px rgba(115,86,232,.09); }
+    .chat-input { width: 100%; max-height: 76px; resize: none; padding: 5px 0; border: 0; outline: 0; color: #38374c; background: transparent; font-size: 10px; line-height: 1.5; }
+    .chat-input::placeholder { color: #a19eaf; }
+    .chat-send { width: 30px; height: 30px; display: grid; place-items: center; flex: 0 0 30px; border: 0; border-radius: 9px; color: #fff; background: #7356e8; cursor: pointer; transition: .15s ease; }
+    .chat-send:hover { background: #5f44d3; }
+    .chat-send:disabled { opacity: .45; cursor: not-allowed; }
+    .chat-send svg { width: 15px; height: 15px; }
+    .chat-disclaimer { margin: 6px 2px 0; color: #aaa8b4; font-size: 7px; text-align: center; }
+    .toast {  position: fixed; z-index: 20; left: 50%; bottom: 24px; padding: 11px 15px; border: 1px solid rgba(255,255,255,.12); border-radius: 10px; color: white; background: #24233c; box-shadow: 0 10px 30px rgba(22,19,47,.22); font-size: 11px; font-weight: 650; opacity: 0; transform: translate(-50%, 12px); pointer-events: none; transition: .22s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 1040px) {
+      .workspace { grid-template-columns: minmax(290px, 340px) minmax(0,1fr); gap: 14px; }
+      .profile-panel { padding: 21px 17px 17px; }
+      .results-shell { padding: 21px 18px 18px; }
+      .metric { padding: 10px 9px; gap: 8px; }
+      .metric-icon { width: 30px; height: 30px; flex-basis: 30px; }
+      .icon-action span { display: none; }
+      .icon-action { padding: 8px; }
+    }
+    @media (max-width: 800px) {
+      .hero { grid-template-columns: 1fr 280px; gap: 24px; }
+      .workspace { grid-template-columns: 1fr; }
+      .profile-panel { order: 1; }
+      .results { order: 2; }
+      .profile-panel { padding: 23px; }
+      .results-shell { padding: 22px; }
+      .skills-list { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-inner, .page { width: min(100% - 28px, 500px); }
+      .topbar { height: 64px; }
+      .mode-pill { padding: 7px 8px; font-size: 8px; }
+      .nav-link { display: none; }
+      .page { padding-top: 32px; }
+      .hero { display: block; margin-bottom: 22px; }
+      .hero-art { display: none; }
+      h1 { font-size: 43px; }
+      .hero-copy { font-size: 13px; }
+      .hero-proof { gap: 11px; font-size: 10px; }
+      .profile-panel, .results-shell { padding: 19px 15px 16px; border-radius: 17px; }
+      .skills-list { grid-template-columns: 1fr; }
+      .result-heading { display: block; }
+      .action-buttons { margin-top: 13px; }
+      .icon-action span { display: inline; }
+      .metric-grid { gap: 6px; }
+      .metric { min-height: 67px; display: block; padding: 9px 8px; }
+      .metric-icon { width: 27px; height: 27px; margin-bottom: 6px; }
+      .metric-value { font-size: 14px; }
+      .metric-label { font-size: 8px; }
+      .roadmap-card { padding: 15px 12px 7px; }
+      .agent-panel { padding: 10px 9px 8px; }
+      .agent-call { grid-template-columns: 16px minmax(98px, .9fr) minmax(0, 1.1fr); gap: 5px; }
+      .agent-call-name, .agent-call-result { font-size: 7px; }
+      .roadmap-head { display: block; }
+      .progress-box { width: 150px; margin-top: 13px; }
+      .path-step { grid-template-columns: 25px minmax(0,1fr) auto; gap: 7px; }
+      .step-marker { width: 25px; height: 25px; }
+      .timeline:before { left: 12px; }
+      .footer { display: block; }
+      .footer > span + span { display: block; margin-top: 5px; }
+      .chat-launcher { right: 14px; bottom: 14px; }
+      .chat-widget { right: 14px; bottom: 75px; width: calc(100vw - 28px); height: min(550px, calc(100dvh - 92px)); min-height: 350px; }
+      .chat-live-pill { font-size: 6px; padding: 4px 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="Orbit home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.8 14.1 9.9 21.2 12l-7.1 2.1L12 21.2l-2.1-7.1L2.8 12l7.1-2.1L12 2.8Z" fill="currentColor"/><circle cx="18.7" cy="5.2" r="1.25" fill="#D8D0FF"/><circle cx="5.1" cy="18.5" r=".9" fill="#D8D0FF"/></svg></span>
+        <span><span class="brand-word">orbit</span><span class="brand-caption">CAREER MENTOR</span></span>
+      </a>
+      <div class="nav-right">
+        <span class="mode-pill"><span class="dot"></span><span id="api-status-label">GROQ CHAT · SERVER KEY REQUIRED</span></span>
+        <a class="nav-link" href="#roadmap">Your roadmap <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page" id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span> YOUR NEXT MOVE, MADE CLEAR</div>
+        <h1 id="hero-title">Your potential,<br><span>with a plan.</span></h1>
+        <p class="hero-copy">Tell Orbit what you know and where you’re headed. Get a realistic, step-by-step learning path built around you.</p>
+        <div class="hero-proof">
+          <span><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Skill-gap matched</span>
+          <span><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" stroke="currentColor" stroke-width="1.6"/><path d="M10 5.5v4.8l3 1.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Fits your weekly time</span>
+          <span><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.7 12 7.9l5.3 2.1-5.3 2-2 5.3-2-5.3-5.3-2 5.3-2.1 2-5.2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Built to help you ship</span>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="A personalized path designed around your starting point">
+        <div class="hero-art-label">PERSONALIZED FOR YOU</div>
+        <div class="hero-art-title">Learn what matters.<br>Skip what you know.</div>
+        <div class="hero-art-note">Your goal, current skills and weekly time shape every step.</div>
+        <div class="orbit-stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2 14 10l6.8 2-6.8 2-2 6.8-2-6.8-6.8-2 6.8-2 2-6.8Z" fill="currentColor"/><circle cx="18.5" cy="5.2" r="1.3" fill="#A38FFA"/></svg></div>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Career learning path builder">
+      <aside class="panel profile-panel">
+        <div class="panel-heading">
+          <div><div class="mini-label">YOUR PROFILE</div><h2>Make it yours</h2></div>
+          <div class="step-count"><strong>01</strong> / 03</div>
+        </div>
+        <div class="step-line" aria-hidden="true"><span></span><span></span><span></span></div>
+        <form id="profile-form">
+          <label class="field-label" for="goal"><span>CAREER GOAL</span><span class="field-index">01</span></label>
+          <div class="select-wrap">
+            <select id="goal" class="goal-select" aria-label="Choose a career goal">
+              <option value="frontend">Frontend Developer</option>
+              <option value="backend">Backend Developer</option>
+              <option value="data">Data Analyst</option>
+              <option value="ai">AI / ML Engineer</option>
+              <option value="ux">UX / Product Designer</option>
+              <option value="cyber">Cybersecurity Analyst</option>
+            </select>
+          </div>
+          <div class="quick-start">
+            <div class="quick-label">OR START WITH A SAMPLE PROFILE</div>
+            <div class="demo-buttons">
+              <button type="button" class="demo-chip" data-demo="frontend">Frontend starter</button>
+              <button type="button" class="demo-chip" data-demo="data">Data starter</button>
+              <button type="button" class="demo-chip" data-demo="ai">AI beginner</button>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="section-head">
+            <h3>What can you already do?</h3>
+            <span id="skill-count" class="count-label">0 skills added</span>
+          </div>
+          <p class="field-hint">Select a skill and set your confidence. Orbit will focus on the gaps.</p>
+          <div class="skills-list" id="skills-list"></div>
+          <div class="time-section">
+            <div class="section-head">
+              <h3>Time you can commit</h3>
+              <output class="hours-output" id="hours-output" for="hours">6 hrs / week</output>
+            </div>
+            <div class="range-wrap">
+              <input class="hours-range" id="hours" type="range" min="2" max="20" step="1" value="6" aria-label="Study hours per week">
+              <div class="range-labels"><span>2 hrs</span><span>10 hrs</span><span>20 hrs</span></div>
+            </div>
+            <p class="pace-hint" id="pace-hint">Steady pace — consistent weekly sessions.</p>
+          </div>
+          <button class="primary-btn" id="generate-btn" type="submit">
+            <span id="generate-label">Build my learning path</span>
+            <svg id="generate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="privacy-note"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="8" width="12" height="9" rx="2"/><path d="M7 8V6a3 3 0 0 1 6 0v2"/></svg>Your profile stays on this device.</div>
+        </form>
+      </aside>
+
+      <section class="results" id="roadmap" aria-label="Your personalized learning roadmap" aria-live="polite">
+        <div class="panel results-shell">
+          <div class="result-heading">
+            <div>
+              <div class="result-eyebrow"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.4 12 7.8l5.5 2.2-5.5 2-2 5.6-2-5.6-5.5-2 5.5-2.2 2-5.4Z" fill="currentColor"/></svg>YOUR PERSONAL ROADMAP</div>
+              <h2 id="roadmap-title">Your path to Frontend Developer</h2>
+              <p class="result-sub" id="roadmap-sub">A practical route from your current skills to a portfolio-ready project.</p>
+            </div>
+            <div class="action-buttons">
+              <button class="icon-action" type="button" id="copy-btn" title="Copy roadmap summary"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6.5" y="6.5" width="9" height="10" rx="1.5"/><path d="M12.5 6.5V4.8A1.8 1.8 0 0 0 10.7 3H5A2 2 0 0 0 3 5v7.2A1.8 1.8 0 0 0 4.8 14H6.5"/></svg><span>Copy</span></button>
+              <button class="icon-action" type="button" id="download-btn" title="Download roadmap"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v9m0 0 3.5-3.5M10 12 6.5 8.5M4 14.5v1.2A1.3 1.3 0 0 0 5.3 17h9.4a1.3 1.3 0 0 0 1.3-1.3v-1.2"/></svg><span>Download</span></button>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><div class="metric-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M10 5.5v4.8l3 1.8" stroke-linecap="round"/></svg></div><div><div class="metric-value" id="weeks-stat">—</div><div class="metric-label">Estimated journey</div></div></div>
+            <div class="metric"><div class="metric-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4.5h12v11H4z"/><path d="M7 8h6M7 11h6M7 14h3" stroke-linecap="round"/></svg></div><div><div class="metric-value" id="milestones-stat">—</div><div class="metric-label">Learning milestones</div></div></div>
+            <div class="metric"><div class="metric-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14.5 8 10l2.5 2.5L16 7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7h4v4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="metric-value" id="hours-stat">—</div><div class="metric-label">Your weekly pace</div></div></div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5 12 7.8l5.5 2.2-5.5 2-2 5.5-2-5.5-5.5-2 5.5-2.2 2-5.3Z" fill="currentColor"/></svg></div>
+            <div><div class="insight-title">ORBIT’S READ ON YOUR PROFILE <span class="explain-badge">EXPLAINABLE MATCH</span></div><p class="insight-text" id="insight-text">Your path adapts to what you already know and the time you can commit.</p></div>
+          </div>
+          <div class="agent-panel" aria-label="Orbit mentor agent activity">
+            <div class="agent-panel-head">
+              <div class="agent-head-left">
+                <span class="agent-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5 12 7.8l5.5 2.2-5.5 2-2 5.5-2-5.5-5.5-2 5.5-2.2 2-5.3Z" fill="currentColor"/></svg></span>
+                <div><div class="agent-kicker">AGENT TOOL TRACE</div><div class="agent-run-status" id="agent-run-status">The local mentor is mapping the profile to the goal.</div></div>
+              </div>
+              <span class="agent-mode-tag" title="Tool-driven local mode. No external model or API key is configured.">LOCAL · NO KEY</span>
+            </div>
+            <div class="agent-trace" id="agent-trace" aria-live="polite"></div>
+          </div>
+          <div class="roadmap-card">
+            <div class="roadmap-head">
+              <div><h3>Your learning path</h3><p>Small wins first. Your pace sets the timeline.</p></div>
+              <div class="progress-box"><div class="progress-label"><span>Progress</span><strong id="progress-label">0%</strong></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
+            </div>
+            <div class="timeline" id="timeline"></div>
+          </div>
+          <div class="mentor-footer"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2.8v2m0 10.4v2M2.8 10h2m10.4 0h2M4.9 4.9l1.4 1.4m7.4 7.4 1.4 1.4m0-10.2-1.4 1.4m-7.4 7.4-1.4 1.4"/><circle cx="10" cy="10" r="3.1"/></svg><span id="mentor-footer-text">Your roadmap is a starting point—not a deadline. Mark milestones complete as you go.</span></div>
+        </div>
+      </section>
+    </section>
+
+    <footer class="footer"><span><strong>Orbit</strong> · A focused first step toward your next role.</span><span>Transparent skill-gap engine · No external model or API required · Profile and progress saved locally.</span></footer>
+  </main>
+
+  <button class="chat-launcher" id="chat-launcher" type="button" aria-controls="chat-widget" aria-expanded="false">
+    <span class="chat-launcher-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h12v8.3a1.2 1.2 0 0 1-1.2 1.2H9l-3.5 2v-2H5.2A1.2 1.2 0 0 1 4 12.8V4.5Z"/><path d="M7 8h6M7 10.8h4"/></svg></span>
+    <span>Ask Orbit</span>
+  </button>
+  <aside class="chat-widget" id="chat-widget" aria-labelledby="chat-title" aria-modal="false" role="dialog" hidden>
+    <div class="chat-header">
+      <span class="chat-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 14.2 9.8 21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z" fill="currentColor"/><circle cx="18.5" cy="5" r="1.2" fill="#C6BCFF"/></svg></span>
+      <div class="chat-header-copy"><div class="chat-header-title" id="chat-title">Chat with Orbit</div><div class="chat-header-sub">Your career plan, in context</div></div>
+      <span class="chat-live-pill" id="chat-live-pill" title="The app will try the secure Groq endpoint and fall back locally if unavailable.">GROQ-READY</span>
+      <button class="chat-close" id="chat-close" type="button" aria-label="Close chat"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m5 5 10 10M15 5 5 15"/></svg></button>
+    </div>
+    <div class="chat-context"><span class="chat-context-dot"></span><span id="chat-context-label">Following your current learning path</span></div>
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
+      <div class="chat-row assistant"><span class="chat-mini-avatar" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5 12 7.8l5.5 2.2-5.5 2-2 5.5-2-5.5-5.5-2 5.5-2.2 2-5.3Z" fill="currentColor"/></svg></span><div class="chat-bubble">Hi! I’m Orbit. I can explain your roadmap, help you choose your next step, or adjust the schedule. Try “Replan for 3 hours/week.”</div></div>
+    </div>
+    <div class="chat-prompts" id="chat-prompts">
+      <button class="chat-prompt" type="button" data-chat-prompt="What should I learn first?">What should I learn first?</button>
+      <button class="chat-prompt" type="button" data-chat-prompt="Why this roadmap?">Why this roadmap?</button>
+      <button class="chat-prompt" type="button" data-chat-prompt="Replan for 3 hours/week">Replan for 3 hrs/week</button>
+    </div>
+    <div class="chat-input-area">
+      <form class="chat-form" id="chat-form">
+        <textarea class="chat-input" id="chat-input" rows="1" maxlength="400" placeholder="Ask about your learning path…" aria-label="Ask Orbit a question"></textarea>
+        <button class="chat-send" id="chat-send" type="submit" aria-label="Send message"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 9 11M17 3l-4.7 14-3.1-6.9L3 7l14-4Z"/></svg></button>
+      </form>
+      <div class="chat-disclaimer">When live, messages go to Groq · API key stays server-side · Local fallback</div>
+    </div>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./agent.js"></script>
+  <script>
+    const careers = {
+      frontend: {
+        title: "Frontend Developer",
+        tagline: "A practical route from your current skills to a portfolio-ready project.",
+        resultLine: "Build responsive, accessible interfaces—and show your work.",
+        skills: [
+          { id: "htmlcss", name: "HTML & CSS" }, { id: "javascript", name: "JavaScript" }, { id: "git", name: "Git & GitHub" },
+          { id: "responsive", name: "Responsive design" }, { id: "react", name: "React" }, { id: "accessibility", name: "Accessibility" }, { id: "portfolio", name: "Portfolio projects" }
+        ],
+        modules: [
+          { skill: "htmlcss", phase: "FOUNDATIONS", title: "Semantic HTML & modern CSS", hours: 8, description: "Build accessible page structure, style systems, and confident layouts.", task: "Recreate a clean profile card from a design reference.", resource: "MDN · Learn web development", url: "https://developer.mozilla.org/en-US/docs/Learn_web_development" },
+          { skill: "javascript", phase: "CORE SKILL", title: "JavaScript fundamentals", hours: 12, description: "Use variables, functions, arrays, events, and browser APIs to make pages interactive.", task: "Build a small interactive app with state and form validation.", resource: "freeCodeCamp · JavaScript", url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures-v8/" },
+          { skill: "git", phase: "WORKFLOW", title: "Git & GitHub workflow", hours: 4, description: "Track changes, make clear commits, and collaborate through pull requests.", task: "Publish your practice app with a readable README.", resource: "GitHub Skills · Introduction to GitHub", url: "https://skills.github.com/" },
+          { skill: "responsive", phase: "CRAFT", title: "Responsive layouts", hours: 6, description: "Use flexible sizing, Grid, and media queries to make interfaces work on every screen.", task: "Make your app feel polished on both phone and desktop.", resource: "web.dev · Learn responsive design", url: "https://web.dev/learn/design/" },
+          { skill: "react", phase: "CORE SKILL", title: "React & component thinking", hours: 16, description: "Compose reusable components and manage UI state with modern React patterns.", task: "Turn your interactive app into a small React experience.", resource: "React · Quick Start", url: "https://react.dev/learn" },
+          { skill: "accessibility", phase: "CRAFT", title: "Accessibility & quality", hours: 6, description: "Make interfaces keyboard-friendly, readable, and easier for everyone to use.", task: "Test your project with a keyboard and improve its semantics.", resource: "web.dev · Learn Accessibility", url: "https://web.dev/learn/accessibility/" },
+          { skill: "portfolio", phase: "SHIP IT", title: "Ship a portfolio-ready project", hours: 14, description: "Bring your skills together in a focused project, deployed with a clear case study.", task: "Deploy one complete project and explain the decisions behind it.", resource: "Project brief · Build, deploy, explain", url: "https://vercel.com/docs/deployments/overview" }
+        ]
+      },
+      backend: {
+        title: "Backend Developer",
+        tagline: "A practical route from your current skills to a deployed API project.",
+        resultLine: "Move from programming basics to reliable, useful services.",
+        skills: [
+          { id: "programming", name: "Programming basics" }, { id: "http", name: "HTTP & APIs" }, { id: "node", name: "Node.js" },
+          { id: "sql", name: "SQL & databases" }, { id: "auth", name: "Authentication" }, { id: "testing", name: "Testing" }, { id: "deployment", name: "Deployment" }
+        ],
+        modules: [
+          { skill: "programming", phase: "FOUNDATIONS", title: "Programming foundations", hours: 10, description: "Strengthen variables, functions, data structures, and problem decomposition.", task: "Write small utility functions and test them with real inputs.", resource: "MDN · JavaScript guide", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" },
+          { skill: "http", phase: "FOUNDATIONS", title: "HTTP, requests & APIs", hours: 7, description: "Understand routes, methods, status codes, JSON, and how clients talk to servers.", task: "Design a simple API contract for a student task tracker.", resource: "MDN · Overview of HTTP", url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview" },
+          { skill: "node", phase: "CORE SKILL", title: "Build services with Node.js", hours: 12, description: "Create a server, organize routes, and handle errors and environment settings.", task: "Build a REST API with create, read, update, and delete routes.", resource: "Node.js · Getting started", url: "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs" },
+          { skill: "sql", phase: "CORE SKILL", title: "SQL & data modeling", hours: 9, description: "Model data and query it safely with relationships and constraints.", task: "Design and query a small schema for users and learning goals.", resource: "SQLBolt · Interactive lessons", url: "https://sqlbolt.com/" },
+          { skill: "auth", phase: "SECURITY", title: "Authentication & safe inputs", hours: 8, description: "Learn sessions, password handling, validation, and common API security risks.", task: "Add validated sign-in to a local practice API.", resource: "OWASP · Authentication Cheat Sheet", url: "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" },
+          { skill: "testing", phase: "QUALITY", title: "Test your API", hours: 7, description: "Catch regressions with unit and integration tests for core endpoints.", task: "Test success cases, missing data, and invalid requests.", resource: "Node.js · Test runner", url: "https://nodejs.org/api/test.html" },
+          { skill: "deployment", phase: "SHIP IT", title: "Deploy a production-style API", hours: 10, description: "Configure environment variables, deployment, logging, and a useful README.", task: "Deploy your API and document its endpoints for another developer.", resource: "Render · Web services guide", url: "https://render.com/docs/web-services" }
+        ]
+      },
+      data: {
+        title: "Data Analyst",
+        tagline: "A practical route from your current skills to an insight-led case study.",
+        resultLine: "Turn raw data into clear, decision-ready stories.",
+        skills: [
+          { id: "spreadsheets", name: "Spreadsheets" }, { id: "sql", name: "SQL" }, { id: "python", name: "Python" },
+          { id: "cleaning", name: "Data cleaning" }, { id: "statistics", name: "Statistics" }, { id: "viz", name: "Data visualization" }, { id: "case-study", name: "Case studies" }
+        ],
+        modules: [
+          { skill: "spreadsheets", phase: "FOUNDATIONS", title: "Explore data with spreadsheets", hours: 6, description: "Use formulas, filters, and pivot tables to understand a dataset quickly.", task: "Summarize a public dataset with three useful questions.", resource: "Google Sheets · Training", url: "https://support.google.com/a/users/answer/9282959" },
+          { skill: "sql", phase: "CORE SKILL", title: "SQL for analysis", hours: 10, description: "Query, join, group, and filter relational data to answer business questions.", task: "Write a short set of queries that explain a trend.", resource: "SQLBolt · Interactive lessons", url: "https://sqlbolt.com/" },
+          { skill: "python", phase: "CORE SKILL", title: "Python for data work", hours: 12, description: "Use notebooks, pandas, and simple scripts to analyze repeatable workflows.", task: "Load a CSV and calculate useful summary metrics.", resource: "Kaggle Learn · Python", url: "https://www.kaggle.com/learn/python" },
+          { skill: "cleaning", phase: "CRAFT", title: "Clean and prepare messy data", hours: 8, description: "Handle missing values, duplicates, inconsistent labels, and data types.", task: "Create a before-and-after data quality checklist.", resource: "pandas · Getting started tutorials", url: "https://pandas.pydata.org/docs/getting_started/intro_tutorials/" },
+          { skill: "statistics", phase: "FOUNDATIONS", title: "Statistics for better decisions", hours: 9, description: "Build intuition for distributions, uncertainty, sampling, and misleading comparisons.", task: "Explain one result with a caveat about its limits.", resource: "Khan Academy · Statistics & probability", url: "https://www.khanacademy.org/math/statistics-probability" },
+          { skill: "viz", phase: "CRAFT", title: "Data visualization & storytelling", hours: 8, description: "Choose the right chart and make your key insight easy to find.", task: "Create a one-page dashboard for a non-technical audience.", resource: "Data-to-Viz · Chart decision guide", url: "https://www.data-to-viz.com/" },
+          { skill: "case-study", phase: "SHIP IT", title: "Publish an analyst case study", hours: 12, description: "Combine a clear question, sound analysis, and specific recommendations.", task: "Publish your findings, visuals, and method in a portfolio case study.", resource: "Project brief · Analyze, visualize, recommend", url: "https://www.kaggle.com/datasets" }
+        ]
+      },
+      ai: {
+        title: "AI / ML Engineer",
+        tagline: "A practical route from your current skills to a responsible AI portfolio project.",
+        resultLine: "Build strong foundations before you build with models.",
+        skills: [
+          { id: "python", name: "Python" }, { id: "math", name: "Math & statistics" }, { id: "data", name: "Data preparation" },
+          { id: "ml", name: "Machine learning" }, { id: "deep-learning", name: "Deep learning" }, { id: "llms", name: "LLM applications" }, { id: "ai-project", name: "AI portfolio project" }
+        ],
+        modules: [
+          { skill: "python", phase: "FOUNDATIONS", title: "Python for problem solving", hours: 12, description: "Get comfortable with functions, data structures, notebooks, and clean code.", task: "Write a small notebook that explores and explains a dataset.", resource: "Kaggle Learn · Python", url: "https://www.kaggle.com/learn/python" },
+          { skill: "math", phase: "FOUNDATIONS", title: "Math & statistics for ML", hours: 14, description: "Build intuition for probability, vectors, distributions, and model evaluation.", task: "Explain a simple model metric and what it does not tell you.", resource: "Khan Academy · Statistics & probability", url: "https://www.khanacademy.org/math/statistics-probability" },
+          { skill: "data", phase: "DATA SKILLS", title: "Prepare data for learning", hours: 10, description: "Inspect data, handle missing values, and create a trustworthy train/test split.", task: "Write a repeatable data-cleaning notebook with notes on assumptions.", resource: "pandas · Getting started tutorials", url: "https://pandas.pydata.org/docs/getting_started/intro_tutorials/" },
+          { skill: "ml", phase: "CORE SKILL", title: "Machine learning fundamentals", hours: 16, description: "Train and evaluate baseline models while watching for overfitting and leakage.", task: "Compare two simple models and justify the metric you choose.", resource: "Google · Machine Learning Crash Course", url: "https://developers.google.com/machine-learning/crash-course" },
+          { skill: "deep-learning", phase: "CORE SKILL", title: "Neural networks & deep learning", hours: 18, description: "Learn how neural networks train and where deep learning is useful.", task: "Train a small model and document where it succeeds or fails.", resource: "fast.ai · Practical Deep Learning", url: "https://course.fast.ai/" },
+          { skill: "llms", phase: "APPLIED AI", title: "Build useful LLM applications", hours: 12, description: "Work with prompting, retrieval, evaluation, and safe handling of model outputs.", task: "Prototype a retrieval-backed assistant and test it on edge cases.", resource: "Hugging Face · LLM Course", url: "https://huggingface.co/learn/llm-course" },
+          { skill: "ai-project", phase: "SHIP IT", title: "Ship a responsible AI project", hours: 16, description: "Choose a real use case, measure quality, communicate limitations, and deploy a demo.", task: "Publish a working demo with an evaluation set and clear limitations.", resource: "Project brief · Build, evaluate, explain", url: "https://huggingface.co/learn" }
+        ]
+      },
+      ux: {
+        title: "UX / Product Designer",
+        tagline: "A practical route from your current skills to a thoughtful product case study.",
+        resultLine: "Understand people, shape an experience, and make the work visible.",
+        skills: [
+          { id: "research", name: "User research" }, { id: "ia", name: "Information architecture" }, { id: "wireframes", name: "Wireframing" },
+          { id: "visual", name: "Visual design" }, { id: "prototyping", name: "Prototyping" }, { id: "testing", name: "Usability testing" }, { id: "ux-case", name: "Portfolio case study" }
+        ],
+        modules: [
+          { skill: "research", phase: "FOUNDATIONS", title: "Research real user needs", hours: 8, description: "Choose lightweight research methods and turn observations into useful themes.", task: "Interview three people about one task they find frustrating.", resource: "NN/g · UX research methods", url: "https://www.nngroup.com/articles/which-ux-research-methods/" },
+          { skill: "ia", phase: "FOUNDATIONS", title: "Information architecture", hours: 6, description: "Organize content around user expectations and clear navigation.", task: "Map the content and key paths for a small product.", resource: "NN/g · Information architecture", url: "https://www.nngroup.com/articles/information-architecture-ia/" },
+          { skill: "wireframes", phase: "CORE SKILL", title: "Wireframes & interaction flows", hours: 8, description: "Translate user needs into low-fidelity screens and clear task flows.", task: "Sketch the main path through one key product task.", resource: "Figma · Design resources", url: "https://help.figma.com/hc/en-us/categories/360002042553-Design" },
+          { skill: "visual", phase: "CRAFT", title: "Visual design foundations", hours: 10, description: "Use hierarchy, spacing, typography, and color with consistency and intent.", task: "Create a small set of reusable visual styles for your screens.", resource: "Figma · Design resources", url: "https://help.figma.com/hc/en-us/categories/360002042553-Design" },
+          { skill: "prototyping", phase: "CORE SKILL", title: "Interactive prototyping", hours: 7, description: "Connect screens into a testable prototype that communicates behavior.", task: "Make the main user journey clickable from start to finish.", resource: "Figma · Prototyping guide", url: "https://help.figma.com/hc/en-us/articles/360040314193-Guide-to-prototyping-in-Figma" },
+          { skill: "testing", phase: "QUALITY", title: "Usability testing & iteration", hours: 7, description: "Observe people using your prototype and prioritize evidence-led changes.", task: "Run three short usability tests and record what changed.", resource: "NN/g · Usability testing 101", url: "https://www.nngroup.com/articles/usability-testing-101/" },
+          { skill: "ux-case", phase: "SHIP IT", title: "Write a clear design case study", hours: 10, description: "Tell the story from problem and evidence to trade-offs and outcomes.", task: "Publish your process, key decisions, and what you would improve next.", resource: "Project brief · Show your process", url: "https://www.nngroup.com/articles/ux-case-study-examples-portfolios/" }
+        ]
+      },
+      cyber: {
+        title: "Cybersecurity Analyst",
+        tagline: "A practical route from your current skills to safe, legal security labs.",
+        resultLine: "Learn to spot risk, investigate evidence, and practice responsibly.",
+        skills: [
+          { id: "networking", name: "Networking basics" }, { id: "linux", name: "Linux & command line" }, { id: "python", name: "Python scripting" },
+          { id: "security", name: "Security fundamentals" }, { id: "websec", name: "Web security" }, { id: "defense", name: "Defensive monitoring" }, { id: "cyber-lab", name: "Security lab portfolio" }
+        ],
+        modules: [
+          { skill: "networking", phase: "FOUNDATIONS", title: "Networking fundamentals", hours: 10, description: "Understand IP, DNS, ports, protocols, and how traffic moves.", task: "Draw a simple network flow and explain each hop.", resource: "Cisco Networking Academy · Basics", url: "https://www.netacad.com/courses/networking-basics" },
+          { skill: "linux", phase: "FOUNDATIONS", title: "Linux & command-line fluency", hours: 8, description: "Navigate files, inspect processes, and use shell tools confidently.", task: "Complete a Linux practice lab and keep a short command journal.", resource: "Linux Journey · Learn Linux", url: "https://linuxjourney.com/" },
+          { skill: "python", phase: "CORE SKILL", title: "Python for security tasks", hours: 10, description: "Automate simple file, log, and text-processing tasks safely.", task: "Write a small script that summarizes a sample log file.", resource: "Python · Official tutorial", url: "https://docs.python.org/3/tutorial/" },
+          { skill: "security", phase: "FOUNDATIONS", title: "Security principles & risk", hours: 8, description: "Learn threat modeling, least privilege, and common defensive controls.", task: "Create a basic threat model for a fictional campus app.", resource: "NIST · Cybersecurity Framework", url: "https://www.nist.gov/cyberframework" },
+          { skill: "websec", phase: "CORE SKILL", title: "Web security essentials", hours: 12, description: "Recognize common web risks and practice only in authorized training labs.", task: "Finish a beginner lab in a deliberately vulnerable practice environment.", resource: "PortSwigger · Web Security Academy", url: "https://portswigger.net/web-security" },
+          { skill: "defense", phase: "DEFENSE", title: "Logs, alerts & investigation", hours: 10, description: "Read sample events, separate signal from noise, and document findings.", task: "Write an incident timeline from a provided sample log.", resource: "CyberDefenders · Blue-team labs", url: "https://cyberdefenders.org/blueteam-ctf-challenges/" },
+          { skill: "cyber-lab", phase: "SHIP IT", title: "Build a safe security portfolio", hours: 12, description: "Show your methodology with lab notes, defensive analysis, and clear scope.", task: "Publish one authorized lab write-up with findings and remediation.", resource: "OWASP · Top 10", url: "https://owasp.org/www-project-top-ten/" }
+        ]
+      }
+    };
+
+    const confidenceLabels = { learning: "Learning", comfortable: "Comfortable", confident: "Confident" };
+    const confidenceRank = { learning: 1, comfortable: 2, confident: 3 };
+    const demoProfiles = {
+      frontend: { goal: "frontend", hours: 6, skills: { htmlcss: "comfortable", javascript: "learning", git: "comfortable" } },
+      data: { goal: "data", hours: 7, skills: { spreadsheets: "confident", sql: "comfortable", python: "learning" } },
+      ai: { goal: "ai", hours: 8, skills: { python: "comfortable", data: "learning" } }
+    };
+    const PROFILE_KEY = "orbit-profile-v1";
+    const PROGRESS_KEY = "orbit-progress-v1";
+    const defaultProfile = { goal: "frontend", hours: 6, skills: { htmlcss: "comfortable", javascript: "learning", git: "comfortable" } };
+    let profile = loadProfile();
+    let progress = loadProgress();
+    let toastTimer;
+
+    const goalSelect = document.getElementById("goal");
+    const hoursInput = document.getElementById("hours");
+    const skillsList = document.getElementById("skills-list");
+    const generateBtn = document.getElementById("generate-btn");
+
+    function loadProfile() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(PROFILE_KEY));
+        if (saved && careers[saved.goal]) return { goal: saved.goal, hours: Math.min(20, Math.max(2, Number(saved.hours) || 6)), skills: saved.skills && typeof saved.skills === "object" ? saved.skills : {} };
+      } catch (_) {}
+      return structuredCloneSafe(defaultProfile);
+    }
+    function loadProgress() {
+      try { const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY)); return saved && typeof saved === "object" ? saved : {}; }
+      catch (_) { return {}; }
+    }
+    function structuredCloneSafe(obj) { return JSON.parse(JSON.stringify(obj)); }
+    function saveProfile() { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch (_) {} }
+    function saveProgress() { try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); } catch (_) {} }
+    function escapeHTML(value) { return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char])); }
+
+    function renderSkills() {
+      const career = careers[profile.goal];
+      const selectedIds = new Set(career.skills.map(skill => skill.id));
+      Object.keys(profile.skills).forEach(id => { if (!selectedIds.has(id)) delete profile.skills[id]; });
+      skillsList.innerHTML = career.skills.map(skill => {
+        const value = profile.skills[skill.id] || "";
+        const checked = Boolean(value);
+        return `<div class="skill-row">
+          <label class="skill-select" for="skill-${escapeHTML(skill.id)}">
+            <input class="skill-check" id="skill-${escapeHTML(skill.id)}" type="checkbox" data-skill="${escapeHTML(skill.id)}" ${checked ? "checked" : ""}>
+            <span class="checkmark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3.3 8.2 3 3 6.4-6.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="skill-name">${escapeHTML(skill.name)}</span>
+          </label>
+          <select class="skill-level" data-level="${escapeHTML(skill.id)}" aria-label="Confidence in ${escapeHTML(skill.name)}" ${checked ? "" : "disabled"}>
+            <option value="learning" ${value === "learning" ? "selected" : ""}>Learning</option>
+            <option value="comfortable" ${value === "comfortable" ? "selected" : ""}>Comfortable</option>
+            <option value="confident" ${value === "confident" ? "selected" : ""}>Confident</option>
+          </select>
+        </div>`;
+      }).join("");
+      updateSkillCount();
+      saveProfile();
+    }
+    function updateSkillCount() {
+      const count = Object.keys(profile.skills).length;
+      document.getElementById("skill-count").textContent = `${count} skill${count === 1 ? "" : "s"} added`;
+    }
+    function updateHoursUI() {
+      const hours = Number(profile.hours);
+      document.getElementById("hours-output").textContent = `${hours} hrs / week`;
+      const pct = ((hours - 2) / 18) * 100;
+      hoursInput.style.background = `linear-gradient(90deg, #785ce5 0%, #c9bdf8 ${pct}%, #eae8f1 ${pct}%, #eae8f1 100%)`;
+      let hint = "Steady pace — consistent weekly sessions.";
+      if (hours <= 4) hint = "A lighter pace — the plan stretches to fit.";
+      if (hours >= 12) hint = "Fast track — built for focused study time.";
+      document.getElementById("pace-hint").textContent = hint;
+    }
+    function currentProgressIds() {
+      const roleProgress = progress[profile.goal];
+      return new Set(Array.isArray(roleProgress) ? roleProgress : []);
+    }
+    function updateProgress(steps) {
+      const completedIds = currentProgressIds();
+      const checked = steps.filter(step => step.mastered || completedIds.has(step.skill)).length;
+      const percent = steps.length ? Math.round(checked / steps.length * 100) : 0;
+      document.getElementById("progress-label").textContent = `${percent}%`;
+      document.getElementById("progress-fill").style.width = `${percent}%`;
+    }
+    function renderAgentTrace(agent) {
+      const summary = agent.summary;
+      document.getElementById("agent-run-status").textContent =
+        `${agent.trace.length} local tools executed · ${summary.gapCount} skill gaps identified · plan ${summary.passedValidation ? "validated" : "needs review"}`;
+      document.getElementById("agent-trace").innerHTML = agent.trace.map(entry =>
+        `<div class="agent-call"><span class="agent-call-check" aria-hidden="true">✓</span><span class="agent-call-name" title="${escapeHTML(entry.tool)}">${escapeHTML(entry.tool)}</span><span class="agent-call-result" title="${escapeHTML(entry.result)}">${escapeHTML(entry.result)}</span></div>`
+      ).join("");
+    }
+    function renderRoadmap() {
+      const career = careers[profile.goal];
+      const contextLabel = document.getElementById("chat-context-label");
+      if (contextLabel) contextLabel.textContent = `Following your ${career.title} learning path`;
+      const agent = window.OrbitMentorAgent.run(profile, career);
+      const steps = agent.steps;
+      const hoursTotal = agent.summary.totalHours;
+      const weeks = agent.summary.totalWeeks;
+      const doneIds = currentProgressIds();
+
+      document.getElementById("roadmap-title").textContent = `Your path to ${career.title}`;
+      document.getElementById("roadmap-sub").textContent = career.tagline;
+      document.getElementById("weeks-stat").textContent = weeks === 0 ? "Ready now" : `${weeks} ${weeks === 1 ? "week" : "weeks"}`;
+      document.getElementById("milestones-stat").textContent = `${steps.length} steps`;
+      document.getElementById("hours-stat").textContent = `${profile.hours} hrs / wk`;
+      document.getElementById("insight-text").textContent = agent.insight;
+      document.getElementById("mentor-footer-text").textContent = hoursTotal === 0
+        ? "You’ve marked every mapped skill as confident. Pick a stretch project or a more advanced goal to keep growing."
+        : "Your roadmap is a starting point—not a deadline. Mark milestones complete as you go.";
+      renderAgentTrace(agent);
+
+      document.getElementById("timeline").innerHTML = steps.map((step, index) => {
+        const done = step.mastered || doneIds.has(step.skill);
+        let badge = "New skill";
+        let badgeClass = "";
+        let descriptor = step.description;
+        if (step.mastered) { badge = "Already strong"; badgeClass = "mastered"; descriptor = `You marked this skill as confident. Keep moving—no need to repeat the basics.`; }
+        else if (step.confidence === "comfortable") { badge = "Quick refresh"; badgeClass = "refresh"; descriptor = `You know the basics. ${step.description}`; }
+        else if (step.confidence === "learning") { badge = "Build on it"; badgeClass = "learn"; descriptor = `You’re already learning this. ${step.description}`; }
+        const accessible = step.mastered ? `${step.title} marked complete based on your confidence` : `${done ? "Mark incomplete" : "Mark complete"}: ${step.title}`;
+        const hoursText = step.mastered ? "in your toolkit" : `~${step.hours} hrs`;
+        const task = step.mastered ? "Carry this confidence into the next step." : step.task;
+        return `<article class="path-step ${done ? "is-done" : ""}">
+          <div class="step-marker" aria-hidden="true">${done ? `<svg viewBox="0 0 16 16" fill="none"><path d="m3 8.2 3.1 3 6.8-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>` : String(index + 1).padStart(2, "0")}</div>
+          <div class="step-main">
+            <div class="step-topline"><span class="step-name">${escapeHTML(step.title)}</span><span class="step-tag ${badgeClass}">${escapeHTML(badge)}</span></div>
+            <p class="step-description">${escapeHTML(descriptor)}</p>
+            <div class="step-task"><strong>Try:</strong> ${escapeHTML(task)}</div>
+            <a class="step-resource" href="${escapeHTML(step.safeUrl)}" target="_blank" rel="noopener noreferrer">${escapeHTML(step.resource)} <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h7v7M13 3 6.5 9.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 9.5v3A.5.5 0 0 1 10.5 13h-7a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5h3" stroke-linecap="round"/></svg></a>
+          </div>
+          <div class="step-meta"><span class="step-week">${escapeHTML(step.mastered ? "READY" : step.week)}</span><div class="step-hours">${escapeHTML(hoursText)}</div><button type="button" class="step-done-btn ${done ? "checked" : ""}" data-complete="${escapeHTML(step.skill)}" aria-label="${escapeHTML(accessible)}" ${step.mastered ? "disabled" : ""}><svg viewBox="0 0 16 16" fill="none"><path d="m3 8.2 3.1 3 6.8-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </article>`;
+      }).join("");
+      updateProgress(steps);
+    }
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+    function applyProfile(next, message) {
+      profile = structuredCloneSafe(next);
+      goalSelect.value = profile.goal;
+      hoursInput.value = profile.hours;
+      renderSkills();
+      updateHoursUI();
+      renderRoadmap();
+      saveProfile();
+      if (message) showToast(message);
+    }
+    function roadmapText() {
+      const career = careers[profile.goal];
+      const agent = window.OrbitMentorAgent.run(profile, career);
+      const steps = agent.steps;
+      const totalHours = agent.summary.totalHours;
+      const weeks = agent.summary.totalWeeks;
+      const lines = [
+        `ORBIT LEARNING PATH — ${career.title}`,
+        `${weeks ? `${weeks} weeks` : "Ready for a stretch project"} · ${profile.hours} hours per week · ${steps.length} milestones`,
+        "",
+        `MENTOR NOTE: ${agent.insight}`,
+        ""
+      ];
+      steps.forEach((step, index) => {
+        const label = step.mastered ? "Already confident" : step.week;
+        lines.push(`${index + 1}. ${step.title} — ${label} · ${step.mastered ? "already in your toolkit" : `about ${step.hours} hours`}`);
+        lines.push(`   ${step.description}`);
+        lines.push(`   Try: ${step.task}`);
+        lines.push(`   Resource: ${step.resource} (${step.safeUrl})`);
+        lines.push("");
+      });
+      lines.push("Generated by Orbit. Adjust the plan as your goals change.");
+      return lines.join("\n");
+    }
+
+    function normalizeChatText(value) {
+      return String(value).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, " ").trim();
+    }
+    const chatSkillAliases = {
+      htmlcss: ["html css", "html and css", "html", "css"], javascript: ["js", "javascript"], git: ["github", "git", "version control"],
+      responsive: ["responsive design", "responsive", "mobile first"], accessibility: ["a11y", "accessibility"], portfolio: ["portfolio", "project"],
+      programming: ["programming", "coding basics"], http: ["http", "api", "apis"], node: ["node js", "nodejs", "node"], sql: ["sql", "database"],
+      auth: ["authentication", "auth"], testing: ["testing", "tests"], deployment: ["deployment", "deploy"],
+      spreadsheets: ["spreadsheets", "spreadsheet", "sheets", "excel"], python: ["python"], cleaning: ["data cleaning", "cleaning data"],
+      statistics: ["statistics", "stats"], viz: ["data visualization", "visualization", "charts"], "case-study": ["case study", "case studies"],
+      math: ["math", "statistics"], data: ["data preparation", "data prep"], ml: ["machine learning", "ml"], "deep-learning": ["deep learning", "neural networks"],
+      llms: ["llm", "llms", "language models"], "ai-project": ["ai project", "ai portfolio"], research: ["user research", "research"], ia: ["information architecture", "ia"],
+      wireframes: ["wireframe", "wireframes"], visual: ["visual design", "visual"], prototyping: ["prototype", "prototyping"], testing: ["usability testing", "testing"],
+      "ux-case": ["ux case study", "case study", "portfolio case study"], networking: ["networking", "networks"], linux: ["linux", "command line", "terminal"],
+      security: ["security fundamentals", "security"], websec: ["web security", "websec"], defense: ["defensive monitoring", "blue team", "logs"], "cyber-lab": ["security lab", "cybersecurity portfolio"]
+    };
+    function chatMentionsSkill(normalizedText, skill) {
+      const phrases = [skill.name, ...(chatSkillAliases[skill.id] || [])]
+        .map(normalizeChatText).filter(Boolean);
+      const paddedText = ` ${normalizedText} `;
+      return phrases.some(phrase => paddedText.includes(` ${phrase} `));
+    }
+    function currentChatAgent() { return window.OrbitMentorAgent.run(profile, careers[profile.goal]); }
+    function chatStepLink(step) {
+      return step && step.safeUrl ? { label: step.resource, url: step.safeUrl } : null;
+    }
+    function getMentorResponse(rawMessage) {
+      const raw = String(rawMessage || "").trim();
+      const text = normalizeChatText(raw);
+      const career = careers[profile.goal];
+      let agent = currentChatAgent();
+      if (!text) return { text: "Ask me about your roadmap, a skill gap, a resource, or your weekly schedule." };
+
+      if (/^(hi|hello|hey|good morning|good afternoon)$/.test(text)) {
+        return { text: `Hi! We’re looking at your ${career.title} plan. Ask me what to learn first, why a milestone is here, or tell me how many hours you can study each week.` };
+      }
+
+      if (/(how does|how do|how is).*(agent|orbit|recommend|work)|agent workflow|how.*recommendations/.test(text)) {
+        return { text: "This no-key demo runs a local tool-driven planner: read your profile, analyze skill gaps, sequence milestones, match curated resources, schedule around your hours, then validate the plan. It is transparent and works offline; a hosted LLM is not connected in this build." };
+      }
+
+      const changeGoalIntent = /(switch to|change (my )?goal|new goal|my goal is|want to become|want a path for|move into|career in|set goal to|plan for)/.test(text);
+      if (changeGoalIntent) {
+        const targetAliases = {
+          frontend: ["frontend developer", "front end developer", "frontend", "front end", "web developer"],
+          backend: ["backend developer", "back end developer", "backend", "back end"],
+          data: ["data analyst", "data analytics", "data analysis"],
+          ai: ["ai ml engineer", "ai engineer", "machine learning engineer", "machine learning", "ml engineer"],
+          ux: ["ux designer", "product designer", "ux", "user experience"],
+          cyber: ["cybersecurity analyst", "cyber security analyst", "cybersecurity", "cyber security", "security analyst"]
+        };
+        const padded = ` ${text} `;
+        const target = Object.entries(targetAliases).find(([, aliases]) => aliases.some(alias => padded.includes(` ${normalizeChatText(alias)} `)))?.[0];
+        if (target) {
+          profile.goal = target;
+          profile.skills = {};
+          goalSelect.value = target;
+          renderSkills(); updateHoursUI(); renderRoadmap(); saveProfile();
+          return { text: `Got it — I’ve switched your goal to ${careers[target].title} and refreshed the skill checklist. Select any skills you already have, and I’ll tailor the new plan.` };
+        }
+      }
+
+      const hoursIntent = /(hours?|hrs?|weekly|per week|study time|schedule|time|pace|replan|commit)/.test(text);
+      const hourMatch = raw.match(/\b(\d{1,2})\s*(?:hours?|hrs?|h)\b|\b(\d{1,2})\s*(?:hrs?)?\s*(?:\/\s*week|per\s+week)\b/i);
+      if (hoursIntent && hourMatch) {
+        const requested = Number(hourMatch[1] || hourMatch[2]);
+        const hours = Math.min(20, Math.max(2, requested));
+        profile.hours = hours;
+        hoursInput.value = String(hours);
+        updateHoursUI(); renderRoadmap(); saveProfile();
+        agent = currentChatAgent();
+        const rangeNote = requested !== hours ? ` I’ve set the slider to the supported range (${hours} hours/week).` : "";
+        const estimate = agent.summary.totalWeeks ? `Your updated path is about ${agent.summary.totalHours} focused hours, or roughly ${agent.summary.totalWeeks} weeks.` : "You’ve marked all mapped skills confident, so the plan is ready for a stretch project.";
+        return { text: `Updated your pace to ${hours} hours per week.${rangeNote} ${estimate}` };
+      }
+
+      const namedSkills = career.skills.filter(skill => chatMentionsSkill(text, skill));
+      const saysUnknown = /(dont know|do not know|never used|no experience|new to|not learned)/.test(text);
+      const saysKnowledge = /(i know|already know|confident in|comfortable with|familiar with|have used|ve used|learning|mark .* confident|i can use)/.test(text);
+      if (namedSkills.length && (saysUnknown || saysKnowledge)) {
+        const selectedLevel = /learning|just started/.test(text) ? "learning" : /comfortable|familiar|some experience/.test(text) ? "comfortable" : "confident";
+        namedSkills.forEach(skill => {
+          if (saysUnknown) delete profile.skills[skill.id];
+          else profile.skills[skill.id] = selectedLevel;
+        });
+        renderSkills(); renderRoadmap(); saveProfile();
+        const names = namedSkills.map(skill => skill.name).join(", ");
+        if (saysUnknown) return { text: `I’ve left ${names} as a gap in your profile. The roadmap will keep those steps in your learning path.` };
+        agent = currentChatAgent();
+        const effect = selectedLevel === "confident" ? "I’ve marked them Confident, so those basics are skipped in the time estimate." : `I’ve marked them ${selectedLevel === "learning" ? "Learning" : "Comfortable"}, so the plan will build on what you know.`;
+        return { text: `Updated ${names}. ${effect}` };
+      }
+
+      const resourceIntent = /(resource|course|tutorial|link|learning material|where can i learn)/.test(text);
+      if (resourceIntent) {
+        const target = namedSkills.length ? agent.steps.find(step => step.skill === namedSkills[0].id) : null;
+        const next = target || agent.steps.find(step => !step.mastered && !currentProgressIds().has(step.skill));
+        if (next) return { text: `For ${next.title}, start with ${next.resource}. A good practice task is: ${next.task}`, link: chatStepLink(next) };
+        return { text: "You’ve marked each mapped skill as confident. Pick a stretch project, then I can help you find a resource for it." };
+      }
+
+      if (/(why|reason|recommend|included in|part of this path)/.test(text)) {
+        const mentioned = namedSkills.length ? agent.steps.find(step => step.skill === namedSkills[0].id) : null;
+        if (mentioned) {
+          if (mentioned.mastered) return { text: `${mentioned.title} is marked Already strong because you set that skill to Confident. Orbit keeps it visible for context but removes its study time.` };
+          const reason = mentioned.confidence === "comfortable" ? "You marked this skill Comfortable, so I shortened it to a quick refresh." : mentioned.confidence === "learning" ? "You said you’re already learning it, so I kept a shorter practice milestone." : "It is an identified gap for this career goal, so it stays in the path.";
+          return { text: `${mentioned.title} supports your ${career.title} goal. ${reason} Its practice task is: ${mentioned.task}`, link: chatStepLink(mentioned) };
+        }
+        return { text: `${agent.insight} I preserve prerequisite order, shorten familiar skills, and skip skills marked Confident.` };
+      }
+
+      if (/(how long|how many weeks|when will i finish|timeline|total hours|time will it take)/.test(text)) {
+        if (!agent.summary.totalWeeks) return { text: "You’ve marked all mapped skills as confident. Your next useful step is a stretch project that proves those skills in practice." };
+        return { text: `At ${profile.hours} hours per week, this roadmap is estimated at ${agent.summary.totalHours} study hours across about ${agent.summary.totalWeeks} weeks. It’s a guide, not a deadline—mark milestones complete as you go.` };
+      }
+
+      if (/(first|start|next step|what should i learn|where do i start|what next|focus on)/.test(text)) {
+        const next = agent.steps.find(step => !step.mastered && !currentProgressIds().has(step.skill));
+        if (next) return { text: `Start with ${next.title} (${next.week}, about ${next.hours} hours). Try this: ${next.task}`, link: chatStepLink(next) };
+        return { text: "You’ve completed or mastered every mapped step. Choose a stretch project and add it to your portfolio to demonstrate your skills." };
+      }
+
+      if (/(hello|help|what can you|can you help|what do you do)/.test(text)) {
+        return { text: "I can explain why a milestone is recommended, suggest your next step, share a resource, update a skill you know, or adjust your weekly hours. Try: “I know JavaScript” or “Replan for 3 hours/week.”" };
+      }
+      return { text: `I’m following your ${career.title} roadmap. Ask me “What should I learn first?”, “Why is ${agent.steps.find(step => !step.mastered)?.title || "this skill"} included?”, or tell me “Replan for 3 hours/week.”` };
+    }
+    function getChatContext() {
+      const career = careers[profile.goal];
+      const agent = currentChatAgent();
+      return {
+        goal: profile.goal,
+        careerTitle: career.title,
+        weeklyHours: Number(profile.hours),
+        skills: { ...profile.skills },
+        skillCatalog: career.skills.map(skill => ({ id: skill.id, name: skill.name })),
+        completedSkillIds: [...currentProgressIds()],
+        milestones: agent.steps.map(step => ({
+          skillId: step.skill, title: step.title, description: step.description, task: step.task,
+          resource: step.resource, url: step.safeUrl, confidence: step.confidence,
+          mastered: step.mastered, hours: step.hours, week: step.week
+        }))
+      };
+    }
+    function setApiStatus(isLive) {
+      const label = document.getElementById("api-status-label");
+      const badge = document.getElementById("chat-live-pill");
+      label.textContent = isLive ? "GROQ AI · LIVE" : "LOCAL FALLBACK · API OFFLINE";
+      badge.textContent = isLive ? "GROQ LIVE" : "LOCAL FALLBACK";
+      badge.title = isLive ? "Groq API is responding through the server-side endpoint." : "Groq is not available on this host; the local mentor is answering instead.";
+      badge.classList.toggle("is-live", Boolean(isLive));
+    }
+    function applyChatActions(actions) {
+      let changed = false;
+      for (const action of (Array.isArray(actions) ? actions : [])) {
+        if (action.type === "set_hours") {
+          profile.hours = Math.min(20, Math.max(2, Number(action.hours) || profile.hours));
+          hoursInput.value = String(profile.hours);
+          changed = true;
+        } else if (action.type === "set_skill") {
+          const allowed = careers[profile.goal].skills.some(skill => skill.id === action.skillId);
+          if (!allowed) continue;
+          if (action.confidence === "not_known") delete profile.skills[action.skillId];
+          else if (["learning", "comfortable", "confident"].includes(action.confidence)) profile.skills[action.skillId] = action.confidence;
+          else continue;
+          changed = true;
+        }
+      }
+      if (changed) {
+        renderSkills();
+        updateHoursUI();
+        renderRoadmap();
+        saveProfile();
+      }
+    }
+    async function requestGroqAgent(message, history) {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, history, context: getChatContext() })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data || typeof data.reply !== "string" || !data.reply.trim()) {
+        throw new Error(data && data.error ? data.error : "AI endpoint unavailable");
+      }
+      return data;
+    }
+    function appendChatMessage(role, text, link, toolNames) {
+      const messages = document.getElementById("chat-messages");
+      let linkMarkup = "";
+      if (link && link.url) {
+        try {
+          const parsed = new URL(link.url);
+          if (parsed.protocol === "https:") linkMarkup = `<a class="chat-link" href="${escapeHTML(parsed.href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(link.label)} <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h7v7M13 3 6.5 9.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`;
+        } catch (_) {}
+      }
+      const toolMarkup = Array.isArray(toolNames) && toolNames.length
+        ? `<div class="chat-agent-tools">AGENT TOOLS · ${escapeHTML(toolNames.join(" → "))}</div>` : "";
+      if (role === "user") {
+        messages.innerHTML += `<div class="chat-row user"><div class="chat-bubble">${escapeHTML(text)}</div></div>`;
+      } else {
+        messages.innerHTML += `<div class="chat-row assistant"><span class="chat-mini-avatar" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5 12 7.8l5.5 2.2-5.5 2-2 5.5-2-5.5-5.5-2 5.5-2.2 2-5.3Z" fill="currentColor"/></svg></span><div><div class="chat-bubble">${escapeHTML(text)}</div>${linkMarkup}${toolMarkup}</div></div>`;
+      }
+      messages.scrollTop = messages.scrollHeight;
+    }
+    let chatBusy = false;
+    const chatHistory = [];
+    function sendChatMessage(rawMessage) {
+      const input = document.getElementById("chat-input");
+      const message = String(rawMessage || "").trim();
+      if (!message || chatBusy) return;
+      chatBusy = true;
+      document.getElementById("chat-send").disabled = true;
+      appendChatMessage("user", message);
+      const history = chatHistory.slice(-8);
+      chatHistory.push({ role: "user", content: message });
+      input.value = "";
+      document.getElementById("chat-prompts").style.display = "none";
+      const messages = document.getElementById("chat-messages");
+      messages.innerHTML += `<div class="chat-row assistant" id="chat-typing"><span class="chat-mini-avatar" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5 12 7.8l5.5 2.2-5.5 2-2 5.5-2-5.5-5.5-2 5.5-2.2 2-5.3Z" fill="currentColor"/></svg></span><div class="chat-typing"><span></span><span></span><span></span></div></div>`;
+      messages.scrollTop = messages.scrollHeight;
+      window.setTimeout(async () => {
+        const typing = document.getElementById("chat-typing");
+        if (typing) typing.remove();
+        let answer;
+        try {
+          const result = await requestGroqAgent(message, history);
+          applyChatActions(result.actions);
+          setApiStatus(true);
+          answer = { text: result.reply, link: result.resource, tools: result.toolTrace };
+        } catch (_) {
+          setApiStatus(false);
+          const local = getMentorResponse(message);
+          answer = { ...local, text: `Groq isn’t connected on this host, so I used the local mentor. ${local.text}` };
+        }
+        appendChatMessage("assistant", answer.text, answer.link, answer.tools);
+        chatHistory.push({ role: "assistant", content: answer.text });
+        chatBusy = false;
+        document.getElementById("chat-send").disabled = false;
+        input.focus();
+      }, 180);
+    }
+    function setChatOpen(open) {
+      const widget = document.getElementById("chat-widget");
+      const launcher = document.getElementById("chat-launcher");
+      widget.hidden = !open;
+      launcher.setAttribute("aria-expanded", String(open));
+      if (open) window.setTimeout(() => document.getElementById("chat-input").focus(), 40);
+    }
+
+    goalSelect.addEventListener("change", () => {
+      profile.goal = goalSelect.value;
+      profile.skills = {};
+      renderSkills();
+      saveProfile();
+      renderRoadmap();
+      showToast("Goal updated — choose the skills you already have.");
+    });
+    skillsList.addEventListener("change", event => {
+      const checkbox = event.target.closest("[data-skill]");
+      const levelSelect = event.target.closest("[data-level]");
+      if (checkbox) {
+        const id = checkbox.dataset.skill;
+        if (checkbox.checked) profile.skills[id] = "learning";
+        else delete profile.skills[id];
+        renderSkills();
+        renderRoadmap();
+        saveProfile();
+      } else if (levelSelect) {
+        profile.skills[levelSelect.dataset.level] = levelSelect.value;
+        updateSkillCount();
+        renderRoadmap();
+        saveProfile();
+      }
+    });
+    hoursInput.addEventListener("input", () => {
+      profile.hours = Number(hoursInput.value);
+      updateHoursUI();
+      renderRoadmap();
+      saveProfile();
+    });
+    document.querySelectorAll("[data-demo]").forEach(button => {
+      button.addEventListener("click", () => applyProfile(demoProfiles[button.dataset.demo], `Loaded the ${careers[demoProfiles[button.dataset.demo].goal].title} sample profile.`));
+    });
+    document.getElementById("profile-form").addEventListener("submit", event => {
+      event.preventDefault();
+      if (generateBtn.disabled) return;
+      generateBtn.disabled = true;
+      document.getElementById("generate-label").textContent = "Mapping your skill gaps…";
+      const icon = document.getElementById("generate-icon");
+      icon.classList.add("spin");
+      icon.innerHTML = '<circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" opacity=".25"/><path d="M20 12a8 8 0 0 0-8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+      window.setTimeout(() => {
+        profile.goal = goalSelect.value;
+        profile.hours = Number(hoursInput.value);
+        renderRoadmap();
+        saveProfile();
+        generateBtn.disabled = false;
+        document.getElementById("generate-label").textContent = "Build my learning path";
+        icon.classList.remove("spin");
+        icon.innerHTML = '<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>';
+        showToast("Your learning path is ready.");
+      }, 550);
+    });
+    document.getElementById("timeline").addEventListener("click", event => {
+      const button = event.target.closest("[data-complete]");
+      if (!button || button.disabled) return;
+      const id = button.dataset.complete;
+      const list = Array.isArray(progress[profile.goal]) ? progress[profile.goal] : [];
+      progress[profile.goal] = list.includes(id) ? list.filter(item => item !== id) : [...list, id];
+      saveProgress();
+      renderRoadmap();
+      showToast(list.includes(id) ? "Milestone moved back to your plan." : "Milestone complete — nice work!");
+    });
+    document.getElementById("copy-btn").addEventListener("click", async () => {
+      const text = roadmapText();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("Roadmap copied to clipboard.");
+      } catch (_) {
+        const temp = document.createElement("textarea");
+        temp.value = text; temp.style.position = "fixed"; temp.style.opacity = "0";
+        document.body.appendChild(temp); temp.select();
+        try { document.execCommand("copy"); showToast("Roadmap copied to clipboard."); }
+        catch (__) { showToast("Copy isn’t available here — use Download instead."); }
+        temp.remove();
+      }
+    });
+    document.getElementById("download-btn").addEventListener("click", () => {
+      const blob = new Blob([roadmapText()], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url; link.download = `orbit-${profile.goal}-learning-path.txt`;
+      document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+      showToast("Your roadmap download is ready.");
+    });
+
+    document.getElementById("chat-launcher").addEventListener("click", () => setChatOpen(true));
+    document.getElementById("chat-close").addEventListener("click", () => setChatOpen(false));
+    document.getElementById("chat-form").addEventListener("submit", event => {
+      event.preventDefault();
+      sendChatMessage(document.getElementById("chat-input").value);
+    });
+    document.getElementById("chat-input").addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage(event.currentTarget.value);
+      }
+    });
+    document.querySelectorAll("[data-chat-prompt]").forEach(button => {
+      button.addEventListener("click", () => sendChatMessage(button.dataset.chatPrompt));
+    });
+
+    goalSelect.value = profile.goal;
+    hoursInput.value = profile.hours;
+    renderSkills();
+    updateHoursUI();
+    renderRoadmap();
+  </script>
+</body>
+</html>

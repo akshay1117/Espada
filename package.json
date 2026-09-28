@@ -1,0 +1,11 @@
+{
+  "name": "orbit-ai-career-mentor",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npx vercel dev"
+  }
+}
